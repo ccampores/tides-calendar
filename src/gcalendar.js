@@ -7,8 +7,8 @@ import { DateTime } from "luxon";
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
-const TOKEN_PATH = join(cwd(), 'resources/token.json');
-const CREDENTIALS_PATH = join(cwd(), 'resources/credentials.json');
+const TOKEN_PATH = './resources/token.json';
+const CREDENTIALS_PATH = './resources/credentials.json';
 const CALENDAR_ID = '538140bc55ae325829570fcb5927dbbb36281bd00cbd76669ce5efdd354c2bca@group.calendar.google.com'
 const TIME_ZONE = 'Atlantic/Canary'
 

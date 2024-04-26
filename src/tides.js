@@ -42,7 +42,7 @@ export async function fetchTidesFromAPI() {
 export async function fetchTidesFromFile() {
     try {
         // Read the JSON file
-        const jsonString = await fsPromises.readFile('resources/tides.json', 'utf8');
+        const jsonString = await fsPromises.readFile('./resources/tides.json', 'utf8');
 
         // Parse the JSON string into an object
         const tideData = JSON.parse(jsonString);
