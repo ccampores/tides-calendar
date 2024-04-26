@@ -3,13 +3,14 @@ import { join } from 'path';
 import { cwd } from 'process';
 import { authenticate } from '@google-cloud/local-auth';
 import { google } from 'googleapis';
-import { createEvent } from './dates.js';
+import { DateTime } from "luxon";
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 const TOKEN_PATH = join(cwd(), 'resources/token.json');
 const CREDENTIALS_PATH = join(cwd(), 'resources/credentials.json');
-const CALENDAR_ID = '395f14fc7a1c1e01fa461552b4c8230e0d55f7477ce9cd7f7fa56deb4ffa0477@group.calendar.google.com'
+const CALENDAR_ID = '538140bc55ae325829570fcb5927dbbb36281bd00cbd76669ce5efdd354c2bca@group.calendar.google.com'
+const TIME_ZONE = 'Atlantic/Canary'
 
 async function loadSavedCredentialsIfExist() {
     try {
@@ -62,7 +63,7 @@ export async function getAllEvents(auth) {
     if (!events || events.length === 0) {
         console.log('No upcoming events found.');
     } else {
-        console.log(`Upcoming ${maxResults} events: `);
+        console.log('Upcoming events: ');
         events.map((event, i) => {
             const start = event.start.dateTime || event.start.date;
             console.log(`${start} - ${event.summary}`);
@@ -72,11 +73,22 @@ export async function getAllEvents(auth) {
     return events;
 }
 
+function createEvent(dateTimeString, durationInMinutes, timeZone = TIME_ZONE) {
+    const dt = DateTime.fromISO(dateTimeString).setZone(timeZone);
+    const startTime = dt.minus({ minutes: durationInMinutes / 2 });
+    const endTime = dt.plus({ minutes: durationInMinutes / 2 });
+
+    return {
+        start: startTime.toISO(),
+        end: endTime.toISO()
+    }
+};
+
 export async function addEvent(auth, input) {
-    const TIME_ZONE = 'Atlantic/Canary'
-    const event = createEvent(input.datetime);
+    const { datetime, state } = input
+    const event = createEvent(datetime, 120);
     const gEvent = {
-        'summary': input.state,
+        'summary': state,
         'start': {
             'dateTime': event.start,
             'timeZone': TIME_ZONE,
