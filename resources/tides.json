@@ -1,0 +1,199 @@
+{
+    "disclaimer": "NOT SUITABLE FOR NAVIGATIONAL PURPOSES. Marea API does not warrant that the provided data will be free from errors or omissions. Provided data are NOT suitable for usage where someone could be harmed or suffer any damage.",
+    "status": 200,
+    "latitude": 44.414,
+    "longitude": -2.097,
+    "origin": {
+        "latitude": 44.4375,
+        "longitude": -2.125,
+        "distance": 3.433716,
+        "unit": "km"
+    },
+    "datums": {
+        "LAT": -2.318,
+        "HAT": 2.364,
+        "MLLW": -1.406,
+        "MHHW": 1.405,
+        "MHW": 1.337,
+        "MLW": -1.357,
+        "MTL": -0.01,
+        "DTL": -0.001,
+        "GT": 2.811,
+        "MN": 2.694,
+        "DHQ": 0.067,
+        "DLQ": 0.049,
+        "MSL": 0
+    },
+    "timestamp": 1714049388,
+    "datetime": "2024-04-25T12:49:48+00:00",
+    "unit": "m",
+    "timezone": "UTC",
+    "datum": "MSL",
+    "extremes": [
+        {
+            "timestamp": 1714061882,
+            "height": 1.571796155,
+            "state": "HIGH TIDE",
+            "datetime": "2024-04-25T16:18:02+00:00"
+        },
+        {
+            "timestamp": 1714084068,
+            "height": -1.6047491293,
+            "state": "LOW TIDE",
+            "datetime": "2024-04-25T22:27:48+00:00"
+        },
+        {
+            "timestamp": 1714106136,
+            "height": 1.4941395485,
+            "state": "HIGH TIDE",
+            "datetime": "2024-04-26T04:35:36+00:00"
+        },
+        {
+            "timestamp": 1714128068,
+            "height": -1.4958683306,
+            "state": "LOW TIDE",
+            "datetime": "2024-04-26T10:41:08+00:00"
+        },
+        {
+            "timestamp": 1714150094,
+            "height": 1.5319431917,
+            "state": "HIGH TIDE",
+            "datetime": "2024-04-26T16:48:14+00:00"
+        },
+        {
+            "timestamp": 1714172433,
+            "height": -1.5289326564,
+            "state": "LOW TIDE",
+            "datetime": "2024-04-26T23:00:33+00:00"
+        },
+        {
+            "timestamp": 1714194513,
+            "height": 1.3936737538,
+            "state": "HIGH TIDE",
+            "datetime": "2024-04-27T05:08:33+00:00"
+        },
+        {
+            "timestamp": 1714216433,
+            "height": -1.3749536447,
+            "state": "LOW TIDE",
+            "datetime": "2024-04-27T11:13:53+00:00"
+        },
+        {
+            "timestamp": 1714238537,
+            "height": 1.4376551975,
+            "state": "HIGH TIDE",
+            "datetime": "2024-04-27T17:22:17+00:00"
+        },
+        {
+            "timestamp": 1714260998,
+            "height": -1.4020236202,
+            "state": "LOW TIDE",
+            "datetime": "2024-04-27T23:36:38+00:00"
+        },
+        {
+            "timestamp": 1714283166,
+            "height": 1.2454415603,
+            "state": "HIGH TIDE",
+            "datetime": "2024-04-28T05:46:06+00:00"
+        },
+        {
+            "timestamp": 1714305051,
+            "height": -1.2143381922,
+            "state": "LOW TIDE",
+            "datetime": "2024-04-28T11:50:51+00:00"
+        },
+        {
+            "timestamp": 1714327322,
+            "height": 1.2949618397,
+            "state": "HIGH TIDE",
+            "datetime": "2024-04-28T18:02:02+00:00"
+        },
+        {
+            "timestamp": 1714349925,
+            "height": -1.2364542141,
+            "state": "LOW TIDE",
+            "datetime": "2024-04-29T00:18:45+00:00"
+        },
+        {
+            "timestamp": 1714372272,
+            "height": 1.0588258201,
+            "state": "HIGH TIDE",
+            "datetime": "2024-04-29T06:31:12+00:00"
+        },
+        {
+            "timestamp": 1714394109,
+            "height": -1.0263559099,
+            "state": "LOW TIDE",
+            "datetime": "2024-04-29T12:35:09+00:00"
+        },
+        {
+            "timestamp": 1714416658,
+            "height": 1.1243316326,
+            "state": "HIGH TIDE",
+            "datetime": "2024-04-29T18:50:58+00:00"
+        },
+        {
+            "timestamp": 1714439500,
+            "height": -1.0596859306,
+            "state": "LOW TIDE",
+            "datetime": "2024-04-30T01:11:40+00:00"
+        },
+        {
+            "timestamp": 1714462173,
+            "height": 0.8639983651,
+            "state": "HIGH TIDE",
+            "datetime": "2024-04-30T07:29:33+00:00"
+        },
+        {
+            "timestamp": 1714483952,
+            "height": -0.8419462138,
+            "state": "LOW TIDE",
+            "datetime": "2024-04-30T13:32:32+00:00"
+        },
+        {
+            "timestamp": 1714506922,
+            "height": 0.9711569984,
+            "state": "HIGH TIDE",
+            "datetime": "2024-04-30T19:55:22+00:00"
+        },
+        {
+            "timestamp": 1714530176,
+            "height": -0.9304392417,
+            "state": "LOW TIDE",
+            "datetime": "2024-05-01T02:22:56+00:00"
+        },
+        {
+            "timestamp": 1714553357,
+            "height": 0.7328493596,
+            "state": "HIGH TIDE",
+            "datetime": "2024-05-01T08:49:17+00:00"
+        },
+        {
+            "timestamp": 1714575051,
+            "height": -0.730543563,
+            "state": "LOW TIDE",
+            "datetime": "2024-05-01T14:50:51+00:00"
+        },
+        {
+            "timestamp": 1714598381,
+            "height": 0.9179841909,
+            "state": "HIGH TIDE",
+            "datetime": "2024-05-01T21:19:41+00:00"
+        },
+        {
+            "timestamp": 1714621948,
+            "height": -0.9441629284,
+            "state": "LOW TIDE",
+            "datetime": "2024-05-02T03:52:28+00:00"
+        },
+        {
+            "timestamp": 1714645359,
+            "height": 0.7667772841,
+            "state": "HIGH TIDE",
+            "datetime": "2024-05-02T10:22:39+00:00"
+        }
+    ],
+    "heights": [],
+    "source": "FES2014",
+    "copyright": "©2024 Marea | Generated using AVISO+ Products. FES2014 was produced by Noveltis, Legos and CLS and distributed by Aviso+, with support from Cnes (https://www.aviso.altimetry.fr/)"
+}
