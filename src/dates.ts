@@ -13,10 +13,7 @@ export const queryParams = {
     longitude: -13.565674,
     model: 'EOT20',
 
-    /**
-     * @param {number} newTimestamp
-     */
-    set changeTimestamp(newTimestamp) {
+    set changeTimestamp(newTimestamp: number) {
         this.timestamp = newTimestamp
     }
 };
