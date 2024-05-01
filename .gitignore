@@ -131,3 +131,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+resources/token.json
+resources/credentials.json
+
+built/
+resources/tide_data/*

@@ -1,22 +1,29 @@
 import * as fsPromises from 'fs/promises';
-//import { DateTime } from 'luxon';
 import fetch from 'node-fetch';
 import url from 'url';
-import { now, queryParams } from './dates.js';
+import path from 'path';
+import { now } from './dates.js';
+
+const queryParams = {
+    timestamp: now,
+    duration: 10080,
+    interval: 0,
+    latitude: 29.118348,
+    longitude: -13.565674,
+    model: 'EOT20',
+
+    set changeTimestamp(newTimestamp: number) {
+        this.timestamp = newTimestamp
+    }
+};
 
 const baseUrl = 'https://api.marea.ooo/v2/tides';
-
 const options = {
     method: 'GET',
     headers: {
         'x-marea-api-token': 'aaf9a059-2226-4a39-aade-358a93ddf9b3'
     }
 };
-
-const urlWithParams: string = url.format({
-    pathname: baseUrl,
-    query: queryParams
-});
 
 interface TideData {
     extremes: Extreme[]
@@ -29,18 +36,21 @@ interface Extreme {
     datetime: string
 }
 
-// TODO for 0 .. # weeks. increase last returned timestamp
-export async function fetchAllTides(startTimestamp: number, numberOfWeeks = 1, remote = true) {
-    // if (startTimestamp) {
-    //     queryParams.changeTimestamp(startTimestamp);
-    //     urlWithParams.changeQueryParams(queryParams);
-    // }
+export async function fetchAllTides(numberOfWeeks = 1, startTimestamp: number = now, remote = true): Promise<Extreme[]> {
     console.log(`fetchAllTides from ${startTimestamp} for ${numberOfWeeks} weeks, remote=${remote}`)
-    let tides: any[] = [];
+
+    let tides: Extreme[] = [];
     let start = startTimestamp;
+
     for (let i = 0; i < numberOfWeeks; i++) {
         console.log(`Timestamp start: ${i}: ${start}`);
-        const oneWeekTides = await fetchTides(remote);
+        queryParams.timestamp = start;
+        console.log(`queryParams: ${queryParams}`);
+        const urlWithParams: string = url.format({
+            pathname: baseUrl,
+            query: queryParams
+        });
+        const oneWeekTides = await fetchTides(remote, urlWithParams, start);
         oneWeekTides.forEach((e: any) => tides.push(e));
 
         const lastTimestamp = oneWeekTides[oneWeekTides.length - 1].timestamp;
@@ -51,41 +61,51 @@ export async function fetchAllTides(startTimestamp: number, numberOfWeeks = 1, r
     return tides;
 }
 
-async function fetchTides(remote: boolean) {
+async function fetchTides(remote: boolean, urlWithParams: string, startTimestamp: number): Promise<Extreme[]> {
     if (remote) {
-        return fetchTidesFromApi();
+        return fetchTidesFromApi(urlWithParams, startTimestamp);
     } else {
         return fetchTidesFromFile();
     }
 }
 
-async function fetchTidesFromApi() {
+async function fetchTidesFromApi(urlWithParams: string, startTimestamp: number): Promise<Extreme[]> {
     try {
         const response = await fetch(urlWithParams, options);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const { extremes } = await response.json() as TideData;
-        console.log(extremes);
-        return extremes;
+        const jsonData = await response.json() as TideData;
+        await saveFile(jsonData, startTimestamp);
+        return jsonData.extremes;
     } catch (error) {
         console.error(`Fetch error: ${error}`);
-        return null;
+        throw error;
     }
 }
 
 
-async function fetchTidesFromFile() {
+async function fetchTidesFromFile(): Promise<Extreme[]> {
     try {
         const jsonString = await fsPromises.readFile('./resources/tides.json', 'utf8');
         const { extremes } = JSON.parse(jsonString);
-        // for (let key in extremes) {
-        //     console.log(`${key} => ${extremes[key].timestamp}`);
-        // }
 
         return extremes;
     } catch (error) {
-        console.log('Error reading or parsing JSON:', error);
+        console.log(`Error reading or parsing JSON: ${error}`);
+        throw error;
+    }
+}
+
+async function saveFile(jsonData: TideData, startTimestamp: number): Promise<void> {
+    try {
+        const fileName = `${startTimestamp}.json`;
+        console.log(`filename: ${fileName}`);
+        const filePath = path.join('./resources/tide_data/', fileName);
+        const jsonString = JSON.stringify(jsonData, null, 2);
+        await fsPromises.writeFile(filePath, jsonString);
+    } catch (error) {
+        console.error(`Error saving json response: ${error}`);
         throw error;
     }
 }
