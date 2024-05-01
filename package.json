@@ -1,13 +1,13 @@
 {
   "name": "tides-calendar",
   "version": "0.1.0",
-  "author": "chiarac <chiara.camporesi@gmail.com>",
+  "author": "ccampores <chiara.camporesi@icloud.com>",
   "description": "A simple Node.js command-line app to create a Google Calendar with Tides",
   "private": true,
   "type": "module",
   "main": "./built/index.js",
   "scripts": {
-    "build": "tsc",
+    "prestart": "tsc",
     "start": "node .",
     "dev": "../node_modules/nodemon/bin/nodemon.js ."
   },
