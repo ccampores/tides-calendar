@@ -1,3 +1,4 @@
+import { now } from './dates.js';
 import { addEvent, authorize, deleteAllEvents, getAllEvents } from './gcalendar.js';
 import { fetchAllTides } from './tides.js';
 
@@ -15,4 +16,7 @@ import { fetchAllTides } from './tides.js';
 
 //getAllEvents(authClient);
 
-
+const tides = await fetchAllTides(now, 2, false);
+tides.forEach(element => {
+    console.log(element)
+});
