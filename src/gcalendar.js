@@ -1,16 +1,15 @@
 import { promises as fs } from 'fs';
-import { join } from 'path';
-import { cwd } from 'process';
 import { authenticate } from '@google-cloud/local-auth';
 import { google } from 'googleapis';
 import { DateTime } from "luxon";
+import { log } from 'console';
+import { TIME_ZONE } from './dates';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 const TOKEN_PATH = './resources/token.json';
 const CREDENTIALS_PATH = './resources/credentials.json';
 const CALENDAR_ID = '538140bc55ae325829570fcb5927dbbb36281bd00cbd76669ce5efdd354c2bca@group.calendar.google.com'
-const TIME_ZONE = 'Atlantic/Canary'
 
 async function loadSavedCredentialsIfExist() {
     try {
@@ -78,15 +77,23 @@ function createEvent(dateTimeString, durationInMinutes, timeZone = TIME_ZONE) {
     const startTime = dt.minus({ minutes: durationInMinutes / 2 });
     const endTime = dt.plus({ minutes: durationInMinutes / 2 });
 
-    return {
-        start: startTime.toISO(),
-        end: endTime.toISO()
+    if (endTime.hour >= 8 && startTime.hour <= 19) {
+        return {
+            start: startTime.toISO(),
+            end: endTime.toISO()
+        }
     }
 };
 
 export async function addEvent(auth, input) {
     const { datetime, state } = input
+    // TODO create only high/low tides
     const event = createEvent(datetime, 120);
+    if (!event) {
+        log.console(`Event ${state} ${datetime} skipped.`);
+        return;
+    }
+
     const gEvent = {
         'summary': state,
         'start': {
