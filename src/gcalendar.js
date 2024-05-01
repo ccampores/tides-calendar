@@ -2,7 +2,6 @@ import { promises as fs } from 'fs';
 import { authenticate } from '@google-cloud/local-auth';
 import { google } from 'googleapis';
 import { DateTime } from "luxon";
-import { log } from 'console';
 import { TIME_ZONE } from './dates.js';
 
 // If modifying these scopes, delete token.json.
@@ -77,11 +76,9 @@ function createEvent(dateTimeString, durationInMinutes, timeZone = TIME_ZONE) {
     const startTime = dt.minus({ minutes: durationInMinutes / 2 });
     const endTime = dt.plus({ minutes: durationInMinutes / 2 });
 
-    if (endTime.hour >= 8 && startTime.hour <= 19) {
-        return {
-            start: startTime.toISO(),
-            end: endTime.toISO()
-        }
+    return {
+        start: startTime.toISO(),
+        end: endTime.toISO()
     }
 };
 
@@ -90,7 +87,7 @@ export async function addEvent(auth, input) {
     // TODO create only high/low tides
     const event = createEvent(datetime, 120);
     if (!event) {
-        log.console(`Event ${state} ${datetime} skipped.`);
+        console.log(`Event ${state} ${datetime} skipped.`);
         return;
     }
 

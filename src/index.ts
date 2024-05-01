@@ -1,22 +1,17 @@
-// import { now } from './dates.js';
 import { addEvent, authorize, deleteAllEvents, getAllEvents } from './gcalendar.js';
-import { fetchAllTides } from './tides.js';
+import { fetchAllTides, fetchTidesFromFile } from './tides.js';
 
-// const authClient = await authorize();
+const authClient = await authorize();
 
 // deleteAllEvents(authClient);
 
-// const tides = await fetchAllTides(now);
+const tides = await fetchTidesFromFile('./resources/tide_data/1714602684.json');
 
-// tides.forEach((t) => {
-//     addEvent(authClient, t)
-//         .catch(console.error);
-// });
-
+tides.forEach((t) => {
+    addEvent(authClient, t)
+        .catch(console.error);
+});
 
 // getAllEvents(authClient);
 
-const tides = await fetchAllTides(4, 1715802005);
-// tides.forEach(element => {
-//     console.log(element)
-// });
+//await fetchAllTides(2, 1717590779);

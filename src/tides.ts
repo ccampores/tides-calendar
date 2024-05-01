@@ -39,13 +39,14 @@ interface Extreme {
 export async function fetchAllTides(numberOfWeeks = 1, startTimestamp: number = now): Promise<Extreme[]> {
     console.log(`fetchAllTides from ${startTimestamp} for ${numberOfWeeks} weeks`)
 
-    let tides: Extreme[] = [];
+    const tides: Extreme[] = [];
     let start = startTimestamp;
 
-    for (let i = 0; i < numberOfWeeks; i++) {
-        console.log(`Timestamp start: ${i}: ${start}`);
+    for (let i = 1; i <= numberOfWeeks; i++) {
+        console.log(`=== Week ${i} ===`);
+        console.log(`Timestamp start: ${start}`);
         queryParams.timestamp = start;
-        console.log(`queryParams: ${queryParams}`);
+        console.log(`queryParams.timestamp: ${queryParams.timestamp}`);
         const urlWithParams: string = url.format({
             pathname: baseUrl,
             query: queryParams
