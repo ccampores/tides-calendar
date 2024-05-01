@@ -36,8 +36,8 @@ interface Extreme {
     datetime: string
 }
 
-export async function fetchAllTides(numberOfWeeks = 1, startTimestamp: number = now, remote = true): Promise<Extreme[]> {
-    console.log(`fetchAllTides from ${startTimestamp} for ${numberOfWeeks} weeks, remote=${remote}`)
+export async function fetchAllTides(numberOfWeeks = 1, startTimestamp: number = now): Promise<Extreme[]> {
+    console.log(`fetchAllTides from ${startTimestamp} for ${numberOfWeeks} weeks`)
 
     let tides: Extreme[] = [];
     let start = startTimestamp;
@@ -50,7 +50,7 @@ export async function fetchAllTides(numberOfWeeks = 1, startTimestamp: number = 
             pathname: baseUrl,
             query: queryParams
         });
-        const oneWeekTides = await fetchTides(remote, urlWithParams, start);
+        const oneWeekTides = await fetchTidesFromApi(urlWithParams, start);
         oneWeekTides.forEach((e: any) => tides.push(e));
 
         const lastTimestamp = oneWeekTides[oneWeekTides.length - 1].timestamp;
@@ -61,11 +61,15 @@ export async function fetchAllTides(numberOfWeeks = 1, startTimestamp: number = 
     return tides;
 }
 
-async function fetchTides(remote: boolean, urlWithParams: string, startTimestamp: number): Promise<Extreme[]> {
-    if (remote) {
-        return fetchTidesFromApi(urlWithParams, startTimestamp);
-    } else {
-        return fetchTidesFromFile();
+export async function fetchTidesFromFile(filename: string): Promise<Extreme[]> {
+    try {
+        const jsonString = await fsPromises.readFile(filename, 'utf8');
+        const { extremes } = JSON.parse(jsonString);
+
+        return extremes;
+    } catch (error) {
+        console.log(`Error reading or parsing JSON: ${error}`);
+        throw error;
     }
 }
 
@@ -84,19 +88,6 @@ async function fetchTidesFromApi(urlWithParams: string, startTimestamp: number):
     }
 }
 
-
-async function fetchTidesFromFile(): Promise<Extreme[]> {
-    try {
-        const jsonString = await fsPromises.readFile('./resources/tides.json', 'utf8');
-        const { extremes } = JSON.parse(jsonString);
-
-        return extremes;
-    } catch (error) {
-        console.log(`Error reading or parsing JSON: ${error}`);
-        throw error;
-    }
-}
-
 async function saveFile(jsonData: TideData, startTimestamp: number): Promise<void> {
     try {
         const fileName = `${startTimestamp}.json`;
@@ -109,4 +100,3 @@ async function saveFile(jsonData: TideData, startTimestamp: number): Promise<voi
         throw error;
     }
 }
-
