@@ -3,7 +3,7 @@ import { authenticate } from '@google-cloud/local-auth';
 import { google } from 'googleapis';
 import { DateTime } from "luxon";
 import { log } from 'console';
-import { TIME_ZONE } from './dates';
+import { TIME_ZONE } from './dates.js';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];

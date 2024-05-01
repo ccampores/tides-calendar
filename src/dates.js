@@ -3,10 +3,10 @@ import { DateTime, Settings } from 'luxon';
 export const TIME_ZONE = 'Atlantic/Canary'
 Settings.defaultZone = TIME_ZONE
 
-const timestamp = DateTime.now().toUnixInteger()
+export const now = DateTime.now().toUnixInteger();
 
 export const queryParams = {
-    timestamp: timestamp,
+    timestamp: now,
     duration: 10080,
     interval: 0,
     latitude: 29.118348,

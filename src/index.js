@@ -1,7 +1,7 @@
 import { addEvent, authorize, deleteAllEvents, getAllEvents } from './gcalendar.js';
-import { fetchTidesFromAPI, fetchTidesFromFile } from './tides.js';
+import { fetchAllTides } from './tides.js';
 
-const authClient = await authorize();
+//const authClient = await authorize();
 
 // deleteAllEvents(authClient);
 
@@ -13,4 +13,6 @@ const authClient = await authorize();
 // });
 
 
-getAllEvents(authClient);
+//getAllEvents(authClient);
+
+
