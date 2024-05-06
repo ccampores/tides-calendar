@@ -2,13 +2,13 @@ import { promises as fs } from 'fs';
 import { authenticate } from '@google-cloud/local-auth';
 import { google } from 'googleapis';
 import { DateTime } from "luxon";
-import { TIME_ZONE } from './dates.js';
+import { TIME_ZONE, sleep } from './dates.js';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 const TOKEN_PATH = './resources/token.json';
 const CREDENTIALS_PATH = './resources/credentials.json';
-const CALENDAR_ID = '538140bc55ae325829570fcb5927dbbb36281bd00cbd76669ce5efdd354c2bca@group.calendar.google.com'
+const HIGH_TIDES_CALENDAR_ID = 'c3f7562306a95ad6eb8be337fd7b8b00081af37d05de95bee60111f7e4f38b8d@group.calendar.google.com'
 
 async function loadSavedCredentialsIfExist() {
     try {
@@ -51,7 +51,7 @@ export async function authorize() {
 export async function getAllEvents(auth) {
     const calendar = google.calendar({ version: 'v3', auth });
     const res = await calendar.events.list({
-        calendarId: CALENDAR_ID,
+        calendarId: HIGH_TIDES_CALENDAR_ID,
         timeMin: new Date().toISOString(),
         maxResults: 100,
         singleEvents: true,
@@ -84,7 +84,11 @@ function createEvent(dateTimeString, durationInMinutes, timeZone = TIME_ZONE) {
 
 export async function addEvent(auth, input) {
     const { datetime, state } = input
-    // TODO create only high/low tides
+    if (state === 'LOW TIDE') {
+        console.log(`Event ${state} ${datetime} skipped.`);
+        return;
+    }
+
     const event = createEvent(datetime, 120);
     if (!event) {
         console.log(`Event ${state} ${datetime} skipped.`);
@@ -106,15 +110,16 @@ export async function addEvent(auth, input) {
     const calendar = google.calendar({ version: 'v3', auth });
     calendar.events.insert({
         auth: auth,
-        calendarId: CALENDAR_ID,
+        calendarId: HIGH_TIDES_CALENDAR_ID,
         resource: gEvent,
-    }, function (err, gEvent) {
+    }, function (err) {
         if (err) {
             console.log('There was an error contacting the Calendar service: ' + err);
             return;
         }
-        console.log(`Event created: ${gEvent.summary}`);
     });
+
+    console.log(`Added ${state} at ${datetime}`);
 }
 
 export async function deleteAllEvents(auth) {
@@ -128,6 +133,7 @@ async function deleteEvent(auth, event) {
     const calendar = google.calendar({ version: 'v3', auth: auth });
     calendar.events.delete({
         eventId: event.id,
-        calendarId: CALENDAR_ID
-    })
+        calendarId: HIGH_TIDES_CALENDAR_ID
+    });
+    await sleep(5000);
 }
