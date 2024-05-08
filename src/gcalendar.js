@@ -2,13 +2,12 @@ import { promises as fs } from 'fs';
 import { authenticate } from '@google-cloud/local-auth';
 import { google } from 'googleapis';
 import { DateTime } from "luxon";
-import { TIME_ZONE, sleep } from './dates.js';
+import { TIME_ZONE, sleep } from './utils.js';
 
-// If modifying these scopes, delete token.json.
+const CALENDAR_ID = 'c3f7562306a95ad6eb8be337fd7b8b00081af37d05de95bee60111f7e4f38b8d@group.calendar.google.com'
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 const TOKEN_PATH = './resources/token.json';
 const CREDENTIALS_PATH = './resources/credentials.json';
-const HIGH_TIDES_CALENDAR_ID = 'c3f7562306a95ad6eb8be337fd7b8b00081af37d05de95bee60111f7e4f38b8d@group.calendar.google.com'
 
 async function loadSavedCredentialsIfExist() {
     try {
@@ -51,7 +50,7 @@ export async function authorize() {
 export async function getAllEvents(auth) {
     const calendar = google.calendar({ version: 'v3', auth });
     const res = await calendar.events.list({
-        calendarId: HIGH_TIDES_CALENDAR_ID,
+        calendarId: CALENDAR_ID,
         timeMin: new Date().toISOString(),
         maxResults: 100,
         singleEvents: true,
@@ -82,14 +81,14 @@ function createEvent(dateTimeString, durationInMinutes, timeZone = TIME_ZONE) {
     }
 };
 
-export async function addEvent(auth, input) {
+export async function addEvent(auth, input, durationInMinutes) {
     const { datetime, state } = input
     if (state === 'LOW TIDE') {
         console.log(`Event ${state} ${datetime} skipped.`);
         return;
     }
 
-    const event = createEvent(datetime, 120);
+    const event = createEvent(datetime, durationInMinutes);
     if (!event) {
         console.log(`Event ${state} ${datetime} skipped.`);
         return;
@@ -110,7 +109,7 @@ export async function addEvent(auth, input) {
     const calendar = google.calendar({ version: 'v3', auth });
     calendar.events.insert({
         auth: auth,
-        calendarId: HIGH_TIDES_CALENDAR_ID,
+        calendarId: CALENDAR_ID,
         resource: gEvent,
     }, function (err) {
         if (err) {
@@ -133,7 +132,7 @@ async function deleteEvent(auth, event) {
     const calendar = google.calendar({ version: 'v3', auth: auth });
     calendar.events.delete({
         eventId: event.id,
-        calendarId: HIGH_TIDES_CALENDAR_ID
+        calendarId: CALENDAR_ID
     });
     await sleep(5000);
 }

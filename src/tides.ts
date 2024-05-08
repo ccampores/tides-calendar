@@ -2,7 +2,10 @@ import * as fsPromises from 'fs/promises';
 import fetch from 'node-fetch';
 import url from 'url';
 import path from 'path';
-import { now } from './dates.js';
+import { now } from './utils.js';
+
+const API_KEY = 'aaf9a059-2226-4a39-aade-358a93ddf9b3';
+const ENDPOINT_URL = 'https://api.marea.ooo/v2/tides';
 
 const queryParams = {
     timestamp: now,
@@ -17,11 +20,10 @@ const queryParams = {
     }
 };
 
-const baseUrl = 'https://api.marea.ooo/v2/tides';
 const options = {
     method: 'GET',
     headers: {
-        'x-marea-api-token': 'aaf9a059-2226-4a39-aade-358a93ddf9b3'
+        'x-marea-api-token': API_KEY
     }
 };
 
@@ -45,10 +47,11 @@ export async function fetchAllTides(numberOfWeeks = 1, startTimestamp: number = 
     for (let i = 1; i <= numberOfWeeks; i++) {
         console.log(`=== Week ${i} ===`);
         console.log(`Timestamp start: ${start}`);
+        
         queryParams.timestamp = start;
-        console.log(`queryParams.timestamp: ${queryParams.timestamp}`);
+        
         const urlWithParams: string = url.format({
-            pathname: baseUrl,
+            pathname: ENDPOINT_URL,
             query: queryParams
         });
         const oneWeekTides = await fetchTidesFromApi(urlWithParams, start);
